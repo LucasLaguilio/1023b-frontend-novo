@@ -21,22 +21,22 @@ function App() {
     event.preventDefault();
     const form = event.currentTarget;
     const formData = new FormData(form);
-    const nome = formData.get('nome') as string;
-    const preco = parseFloat(formData.get('preco') as string);
-    const urlfoto = formData.get('urlfoto') as string;
-    const descricao = formData.get('descricao') as string;
+    const data = {
+      nome: formData.get('nome') as string,
+      preco: Number(formData.get('preco')),
+      urlfoto: formData.get('urlfoto') as string,
+      descricao: formData.get('descricao') as string,
+    };
 
-    // Send POST request to add new product
     const response = await fetch('/api/produtos', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ nome, preco, urlfoto, descricao })
+      body: JSON.stringify(data)
     });
 
     if (response.ok) {
-      // Refresh product list
       const newProduto = await response.json();
       setProdutos(prev => [...prev, newProduto]);
       form.reset();
